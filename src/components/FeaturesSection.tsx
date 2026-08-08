@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'motion/react';
+import { StarrySkyCanvas } from './StarrySkyCanvas';
 import {
   Mic,
   Camera,
@@ -90,9 +91,15 @@ export const FeaturesSection: React.FC = () => {
   return (
     <section
       id="features"
-      className="relative z-30 w-full bg-black text-white py-16 sm:py-24 lg:py-32 px-4 sm:px-6 md:px-12 lg:px-16 border-t border-white/[0.08]"
+      className="relative z-30 w-full text-white py-16 sm:py-24 lg:py-32 px-4 sm:px-6 md:px-12 lg:px-16 border-t border-white/[0.08] overflow-hidden bg-[#121218]"
+      style={{
+        background: 'radial-gradient(ellipse at 50% 40%, #1a1a22 0%, #121218 70%)',
+      }}
     >
-      <div className="max-w-7xl mx-auto space-y-16 sm:space-y-20">
+      {/* Animated Starry Sky Canvas Background */}
+      <StarrySkyCanvas />
+
+      <div className="relative z-10 max-w-7xl mx-auto space-y-16 sm:space-y-20">
         
         {/* SECTION INTRO */}
         <motion.div

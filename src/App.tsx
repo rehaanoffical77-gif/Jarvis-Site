@@ -3,6 +3,9 @@ import { motion } from 'motion/react';
 import { GalaxyCanvas } from './components/GalaxyCanvas';
 import { HeroContent } from './components/HeroContent';
 import { FeaturesSection } from './components/FeaturesSection';
+import { VisionSection } from './components/VisionSection';
+import { ControlSection } from './components/ControlSection';
+import { FooterSection } from './components/FooterSection';
 import { DEFAULT_GALAXY_OPTIONS } from './presets';
 
 export default function App() {
@@ -14,6 +17,16 @@ export default function App() {
     setActiveTab(item);
     if (item === 'Home') {
       window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else if (item === 'Vision') {
+      const el = document.getElementById('vision');
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth' });
+      }
+    } else if (item === 'Control') {
+      const el = document.getElementById('control');
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth' });
+      }
     } else {
       const el = document.getElementById('features');
       if (el) {
@@ -57,8 +70,6 @@ export default function App() {
                     key={item}
                     onClick={() => handleNavClick(item)}
                     className={`relative py-1 text-xs sm:text-sm font-bold tracking-widest uppercase transition-all duration-200 cursor-pointer whitespace-nowrap shrink-0 ${
-                      item === 'Vision' ? 'hidden sm:block' : ''
-                    } ${
                       isActive
                         ? 'text-white font-bold'
                         : 'text-slate-400 hover:text-slate-100'
@@ -97,6 +108,15 @@ export default function App() {
 
       {/* Section 2: Clean Minimal Features Showcase Section */}
       <FeaturesSection />
+
+      {/* Section 3: Vision Section with Silk WebGL Background */}
+      <VisionSection />
+
+      {/* Section 4: Control Section with Clean Black Screen */}
+      <ControlSection />
+
+      {/* Section 5: Empty Footer Space */}
+      <FooterSection />
     </div>
   );
 }

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
+import { ChevronDown } from 'lucide-react';
 import { CinematicJarvisTitle } from './CinematicJarvisTitle';
 
 interface HeroContentProps {
@@ -198,6 +199,33 @@ export const HeroContent: React.FC<HeroContentProps> = ({
           <span>RESEARCH</span>
           <span className="text-slate-700">·</span>
           <span>ANDROID CONTROL</span>
+        </motion.div>
+
+        {/* Cinematic Tagline & Scroll Indicator */}
+        <motion.div
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.65 }}
+          className="pt-5 sm:pt-7 flex flex-col items-center gap-4 sm:gap-5"
+        >
+          {/* Tagline */}
+          <span className="text-[10px] sm:text-xs font-semibold tracking-[0.32em] uppercase text-slate-400/90 text-center px-4">
+            BUILT TO LISTEN. DESIGNED TO ACT.
+          </span>
+
+          {/* Minimal Scroll Indicator */}
+          <div className="pt-2 sm:pt-3 flex flex-col items-center gap-1.5 opacity-60 hover:opacity-100 transition-opacity">
+            <span className="text-[9px] sm:text-[10px] font-medium tracking-[0.38em] uppercase text-slate-500">
+              SCROLL TO EXPLORE
+            </span>
+            <motion.div
+              animate={{ y: [0, 5, 0] }}
+              transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+              className="text-slate-400"
+            >
+              <ChevronDown className="w-3.5 h-3.5 stroke-[1.75]" />
+            </motion.div>
+          </div>
         </motion.div>
       </motion.div>
     </section>

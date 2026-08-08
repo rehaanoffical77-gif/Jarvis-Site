@@ -349,7 +349,7 @@ export const GalaxyCanvas: React.FC<GalaxyCanvasProps> = ({ options, className =
   return (
     <div
       ref={containerRef}
-      className={`fixed inset-0 w-full h-full overflow-hidden bg-black select-none ${className}`}
+      className={`absolute inset-0 w-full h-full overflow-hidden bg-black select-none ${className || ''}`}
     />
   );
 };

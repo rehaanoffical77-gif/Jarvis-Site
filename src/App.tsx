@@ -29,8 +29,8 @@ export default function App() {
         <GalaxyCanvas options={DEFAULT_GALAXY_OPTIONS} />
 
         {/* Fully Responsive Header Bar (Desktop, Tablet, Mobile) */}
-        <header className="absolute top-4 sm:top-6 inset-x-0 z-30 px-4 sm:px-8 md:px-12 lg:px-16">
-          <div className="w-full max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-3 sm:gap-4 lg:gap-0 min-h-[48px]">
+        <header className="absolute top-0 inset-x-0 z-30 pt-3 sm:pt-6 pb-4 px-4 sm:px-8 md:px-12 lg:px-16 bg-gradient-to-b from-black/90 via-black/60 to-transparent backdrop-blur-[2px]">
+          <div className="w-full max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-2.5 sm:gap-4 lg:gap-0 min-h-[48px]">
             
             {/* Top Row on Mobile/Tablet / Left on Desktop: Brand Logo + Download Button on mobile */}
             <div className="w-full lg:w-1/4 flex items-center justify-between lg:justify-start shrink-0">
@@ -41,7 +41,7 @@ export default function App() {
               {/* Mobile/Tablet Download Button (Hidden on Desktop) */}
               <button
                 onClick={() => alert('Downloading JARVIS...')}
-                className="lg:hidden px-4 py-1.5 rounded-full border border-white/40 bg-black/80 hover:bg-white/10 text-white text-[10px] sm:text-xs font-bold tracking-widest uppercase transition-all duration-300 shadow-[0_0_12px_rgba(255,255,255,0.2)] hover:shadow-[0_0_20px_rgba(255,255,255,0.5)] active:scale-95 cursor-pointer whitespace-nowrap"
+                className="lg:hidden px-3.5 py-1.5 rounded-full border border-white/40 bg-black/80 hover:bg-white/10 text-white text-[10px] sm:text-xs font-bold tracking-widest uppercase transition-all duration-300 shadow-[0_0_12px_rgba(255,255,255,0.2)] hover:shadow-[0_0_20px_rgba(255,255,255,0.5)] active:scale-95 cursor-pointer whitespace-nowrap"
               >
                 DOWNLOAD JARVIS
               </button>

@@ -129,19 +129,19 @@ export const HeroContent: React.FC<HeroContentProps> = ({
   };
 
   return (
-    <section className="relative z-20 w-full h-full flex flex-col items-center justify-center px-4 sm:px-6 md:px-8 pointer-events-none pt-16 sm:pt-20 md:pt-24 lg:pt-32 pb-8">
+    <section className="relative z-20 w-full h-full flex flex-col items-center justify-start sm:justify-center px-4 sm:px-6 md:px-8 pointer-events-none pt-28 sm:pt-32 md:pt-32 lg:pt-36 pb-12 sm:pb-8">
       <motion.div
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-        className="w-full max-w-4xl mx-auto flex flex-col items-center text-center space-y-5 sm:space-y-6 md:space-y-7 pointer-events-auto"
+        className="w-full max-w-4xl mx-auto flex flex-col items-center text-center space-y-4 sm:space-y-6 md:space-y-7 pointer-events-auto"
       >
         {/* Cinematic Title & A.I. CHARACTER Badge */}
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.1 }}
-          className="w-full pt-1 sm:pt-3 lg:pt-5"
+          className="w-full pt-1 sm:pt-2 lg:pt-4"
         >
           <CinematicJarvisTitle />
         </motion.div>

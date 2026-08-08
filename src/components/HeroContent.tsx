@@ -129,7 +129,7 @@ export const HeroContent: React.FC<HeroContentProps> = ({
   };
 
   return (
-    <section className="relative z-20 w-full h-full flex flex-col items-center justify-start sm:justify-center px-4 sm:px-6 md:px-8 pointer-events-none pt-28 sm:pt-32 md:pt-32 lg:pt-36 pb-12 sm:pb-8">
+    <div className="relative z-20 w-full flex flex-col items-center justify-center px-4 sm:px-6 md:px-8 pointer-events-none pt-20 sm:pt-28 md:pt-32 lg:pt-36 pb-8 sm:pb-12 my-auto">
       <motion.div
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
@@ -213,7 +213,7 @@ export const HeroContent: React.FC<HeroContentProps> = ({
           </span>
         </motion.div>
       </motion.div>
-    </section>
+    </div>
   );
 };
 

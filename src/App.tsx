@@ -25,7 +25,7 @@ export default function App() {
   return (
     <div className="relative w-full min-h-screen bg-black overflow-x-hidden overflow-y-auto select-none scroll-smooth">
       {/* Section 1: Hero Section with Galaxy Canvas */}
-      <section className="relative w-full min-h-screen flex flex-col justify-between overflow-hidden">
+      <section className="relative w-full min-h-[100dvh] flex flex-col items-center justify-center overflow-hidden">
         <GalaxyCanvas options={DEFAULT_GALAXY_OPTIONS} />
 
         {/* Fully Responsive Header Bar (Desktop, Tablet, Mobile) */}

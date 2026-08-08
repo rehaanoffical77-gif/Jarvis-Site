@@ -193,13 +193,83 @@ export const GalaxyCanvas: React.FC<GalaxyCanvasProps> = ({ options, className =
       container.removeChild(container.firstChild);
     }
 
-    const renderer = new Renderer({
-      alpha: options.transparent,
-      premultipliedAlpha: false,
-      webgl: 2
-    });
+    let renderer: Renderer | null = null;
+    let gl: any = null;
+
+    try {
+      renderer = new Renderer({
+        alpha: options.transparent,
+        premultipliedAlpha: false,
+        webgl: 2
+      });
+      gl = renderer.gl;
+    } catch {
+      try {
+        renderer = new Renderer({
+          alpha: options.transparent,
+          premultipliedAlpha: false,
+          webgl: 1
+        });
+        gl = renderer.gl;
+      } catch (e) {
+        console.warn('WebGL initialization failed:', e);
+      }
+    }
+
+    // Fallback if WebGL is unavailable or context creation failed
+    if (!renderer || !gl) {
+      const canvas = document.createElement('canvas');
+      const w = container.offsetWidth || window.innerWidth;
+      const h = container.offsetHeight || window.innerHeight;
+      canvas.width = w;
+      canvas.height = h;
+      canvas.style.width = '100%';
+      canvas.style.height = '100%';
+      canvas.style.display = 'block';
+      container.appendChild(canvas);
+
+      const ctx = canvas.getContext('2d');
+      let animId: number;
+      if (ctx) {
+        const stars = Array.from({ length: 120 }, () => ({
+          x: Math.random() * w,
+          y: Math.random() * h,
+          r: Math.random() * 1.2 + 0.3,
+          alpha: Math.random(),
+          speed: 0.005 + Math.random() * 0.015
+        }));
+
+        const renderFallback = () => {
+          ctx.clearRect(0, 0, w, h);
+          ctx.fillStyle = options.transparent ? 'rgba(0,0,0,0)' : '#000000';
+          ctx.fillRect(0, 0, w, h);
+
+          stars.forEach(s => {
+            s.alpha += s.speed;
+            if (s.alpha > 1 || s.alpha < 0.2) s.speed = -s.speed;
+            ctx.fillStyle = `rgba(255, 255, 255, ${Math.max(0.1, s.alpha)})`;
+            ctx.beginPath();
+            ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+            ctx.fill();
+          });
+          animId = requestAnimationFrame(renderFallback);
+        };
+        animId = requestAnimationFrame(renderFallback);
+      }
+
+      if (onCanvasReady) {
+        onCanvasReady(canvas);
+      }
+
+      return () => {
+        if (animId) cancelAnimationFrame(animId);
+        if (container.contains(canvas)) {
+          container.removeChild(canvas);
+        }
+      };
+    }
+
     rendererRef.current = renderer;
-    const gl = renderer.gl;
 
     if (options.transparent) {
       gl.enable(gl.BLEND);

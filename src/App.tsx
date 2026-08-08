@@ -6,12 +6,18 @@ import { FeaturesSection } from './components/FeaturesSection';
 import { VisionSection } from './components/VisionSection';
 import { ControlSection } from './components/ControlSection';
 import { FooterSection } from './components/FooterSection';
+import { LaunchingSoonModal } from './components/LaunchingSoonModal';
 import { DEFAULT_GALAXY_OPTIONS } from './presets';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('Home');
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const navItems = ['Home', 'Features', 'Vision', 'Control', 'How It Works'];
+
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
 
   const handleNavClick = (item: string) => {
     setActiveTab(item);
@@ -37,6 +43,9 @@ export default function App() {
 
   return (
     <div className="relative w-full min-h-screen bg-black overflow-x-hidden overflow-y-auto select-none scroll-smooth">
+      {/* Launching Soon Modal Popup */}
+      <LaunchingSoonModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+
       {/* Section 1: Hero Section with Galaxy Canvas */}
       <section className="relative w-full min-h-[100dvh] flex flex-col items-center justify-center overflow-hidden">
         <GalaxyCanvas options={DEFAULT_GALAXY_OPTIONS} />
@@ -53,7 +62,7 @@ export default function App() {
 
               {/* Mobile/Tablet Download Button (Hidden on Desktop) */}
               <button
-                onClick={() => alert('Downloading JARVIS...')}
+                onClick={handleOpenModal}
                 className="lg:hidden px-3.5 py-1.5 rounded-full border border-white/40 bg-black/80 hover:bg-white/10 text-white text-[10px] sm:text-xs font-bold tracking-widest uppercase transition-all duration-300 shadow-[0_0_12px_rgba(255,255,255,0.2)] hover:shadow-[0_0_20px_rgba(255,255,255,0.5)] active:scale-95 cursor-pointer whitespace-nowrap"
               >
                 DOWNLOAD JARVIS
@@ -91,7 +100,7 @@ export default function App() {
             {/* Right: Desktop Download Button (Hidden on Mobile/Tablet) */}
             <div className="hidden lg:flex items-center lg:w-1/4 justify-end shrink-0">
               <button
-                onClick={() => alert('Downloading JARVIS...')}
+                onClick={handleOpenModal}
                 className="px-5 py-2 rounded-full border border-white/40 bg-black/80 hover:bg-white/10 text-white text-xs font-bold tracking-widest uppercase transition-all duration-300 shadow-[0_0_12px_rgba(255,255,255,0.2)] hover:shadow-[0_0_20px_rgba(255,255,255,0.5)] hover:scale-105 active:scale-95 cursor-pointer whitespace-nowrap"
               >
                 DOWNLOAD JARVIS
@@ -102,6 +111,7 @@ export default function App() {
 
         {/* Home Hero Content */}
         <HeroContent
+          onGetJarvis={handleOpenModal}
           onExploreFeatures={() => handleNavClick('Features')}
         />
       </section>
@@ -116,7 +126,7 @@ export default function App() {
       <ControlSection />
 
       {/* Section 5: Empty Footer Space */}
-      <FooterSection />
+      <FooterSection onGetJarvis={handleOpenModal} />
     </div>
   );
 }

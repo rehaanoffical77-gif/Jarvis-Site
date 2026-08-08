@@ -3,7 +3,19 @@ import { motion } from 'motion/react';
 import { Instagram, Youtube, Github } from 'lucide-react';
 import { FallingBeamsCanvas } from './FallingBeamsCanvas';
 
-export const FooterSection: React.FC = () => {
+interface FooterSectionProps {
+  onGetJarvis?: () => void;
+}
+
+export const FooterSection: React.FC<FooterSectionProps> = ({ onGetJarvis }) => {
+  const handleGetJarvis = () => {
+    if (onGetJarvis) {
+      onGetJarvis();
+    } else {
+      alert('Downloading JARVIS...');
+    }
+  };
+
   const handleScroll = (id?: string) => {
     if (!id || id === 'home') {
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -28,7 +40,7 @@ export const FooterSection: React.FC = () => {
             Ready to meet JARVIS?
           </h3>
           <button
-            onClick={() => alert('Downloading JARVIS...')}
+            onClick={handleGetJarvis}
             className="px-6 py-2.5 rounded-full border border-white/40 bg-black hover:bg-white hover:text-black text-white text-xs font-bold tracking-widest uppercase transition-all duration-300 shadow-[0_0_12px_rgba(255,255,255,0.15)] hover:shadow-[0_0_20px_rgba(255,255,255,0.4)] hover:scale-105 active:scale-95 cursor-pointer whitespace-nowrap shrink-0"
           >
             GET JARVIS
@@ -108,7 +120,7 @@ export const FooterSection: React.FC = () => {
             <ul className="space-y-2.5 text-sm font-light text-slate-300">
               <li>
                 <button
-                  onClick={() => alert('Downloading JARVIS...')}
+                  onClick={handleGetJarvis}
                   className="hover:text-white transition-colors duration-200 cursor-pointer text-left"
                 >
                   Get JARVIS

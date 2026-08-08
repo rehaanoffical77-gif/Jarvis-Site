@@ -173,7 +173,8 @@ export const FallingBeamsCanvas: React.FC<FallingBeamsCanvasProps> = ({
 
       void mainImage(out vec4 fc,in vec2 frag){
           vec2 C = vec2(iResolution.x * 0.5, 0.0); float invW=1.0/max(C.x,1.0);
-          float sc=512.0/iResolution.x*.4;
+          float refW = max(iResolution.x, 850.0);
+          float sc = 512.0 / refW * .4;
           vec2 uv=(frag-C)*sc,off=vec2(uBeamXFrac*iResolution.x*sc,uBeamYFrac*iResolution.y*sc);
           vec2 uvc = uv - off;
           float a=0.0,b=0.0;
@@ -392,6 +393,16 @@ export const FallingBeamsCanvas: React.FC<FallingBeamsCanvasProps> = ({
       canvas.style.height = `${h}px`;
       gl.viewport(0, 0, canvas.width, canvas.height);
       gl.uniform3f(uLocations.iResolution, w * dpr, h * dpr, dpr);
+
+      const isMobile = w < 768;
+      // On mobile: position beam to fall top-to-bottom along the right side
+      const beamXFrac = isMobile ? 0.30 : 0.0;
+      const vLenFactor = isMobile ? 3.5 : 2.0;
+      const hLenFactor = isMobile ? 0.8 : 0.5;
+
+      gl.uniform1f(uLocations.uBeamXFrac, beamXFrac);
+      gl.uniform1f(uLocations.uVLenFactor, vLenFactor);
+      gl.uniform1f(uLocations.uHLenFactor, hLenFactor);
     };
 
     const resizeObserver = new ResizeObserver(() => resize());

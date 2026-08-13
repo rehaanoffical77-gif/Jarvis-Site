@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+import { getOptimalDPR } from '../utils/performance';
 
 export const SilkCanvas: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -115,7 +116,7 @@ export const SilkCanvas: React.FC = () => {
 
     const resize = () => {
       if (!canvas.parentElement) return;
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const dpr = getOptimalDPR(1.0);
       const width = canvas.parentElement.clientWidth || window.innerWidth;
       const height = canvas.parentElement.clientHeight || window.innerHeight;
       canvas.width = width * dpr;
@@ -130,7 +131,25 @@ export const SilkCanvas: React.FC = () => {
     }
     resize();
 
+    let isVisible = true;
+    const intersectionObserver = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        isVisible = entry.isIntersecting;
+        if (isVisible && !animId) {
+          animId = requestAnimationFrame(render);
+        }
+      }
+    }, { threshold: 0.02 });
+
+    if (canvas.parentElement) {
+      intersectionObserver.observe(canvas.parentElement);
+    }
+
     const render = (time: number) => {
+      if (!isVisible) {
+        animId = 0;
+        return;
+      }
       gl.uniform2f(uRes, canvas.width, canvas.height);
       gl.uniform1f(uTime, time * 0.001);
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
@@ -141,6 +160,7 @@ export const SilkCanvas: React.FC = () => {
 
     return () => {
       cancelAnimationFrame(animId);
+      intersectionObserver.disconnect();
       window.removeEventListener('resize', resize);
       resizeObserver.disconnect();
     };

@@ -216,4 +216,3 @@ export const HeroContent: React.FC<HeroContentProps> = ({
     </div>
   );
 };
-

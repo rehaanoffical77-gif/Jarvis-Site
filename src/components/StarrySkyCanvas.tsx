@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+import { checkIsLowEndDevice } from '../utils/performance';
 
 export const StarrySkyCanvas: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -35,7 +36,9 @@ export const StarrySkyCanvas: React.FC = () => {
     let shootingStars: ShootingStar[] = [];
 
     const generateStars = (w: number, h: number) => {
-      const count = Math.floor((w * h) / 3500);
+      const isLowEnd = checkIsLowEndDevice();
+      const densityDivider = isLowEnd ? 7000 : 3500;
+      const count = Math.floor((w * h) / densityDivider);
       stars = [];
       for (let i = 0; i < count; i++) {
         stars.push({
@@ -71,9 +74,28 @@ export const StarrySkyCanvas: React.FC = () => {
       });
     };
 
+    let isVisible = true;
+    const intersectionObserver = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        isVisible = entry.isIntersecting;
+        if (isVisible && !animId) {
+          animId = requestAnimationFrame(draw);
+        }
+      }
+    }, { threshold: 0.02 });
+
+    if (canvas.parentElement) {
+      intersectionObserver.observe(canvas.parentElement);
+    }
+
     let startTime = performance.now();
 
     const draw = (currentTime: number) => {
+      if (!isVisible) {
+        animId = 0;
+        return;
+      }
+
       const elapsed = (currentTime - startTime) * 0.05;
       ctx.clearRect(0, 0, width, height);
 
@@ -87,7 +109,7 @@ export const StarrySkyCanvas: React.FC = () => {
       }
 
       // Occasionally spawn a shooting star
-      if (Math.random() < 0.004) spawnShootingStar();
+      if (Math.random() < 0.003) spawnShootingStar();
 
       // Draw + update shooting stars
       shootingStars = shootingStars.filter((sh) => sh.life > 0);
@@ -123,6 +145,7 @@ export const StarrySkyCanvas: React.FC = () => {
 
     return () => {
       cancelAnimationFrame(animId);
+      intersectionObserver.disconnect();
       window.removeEventListener('resize', resize);
       resizeObserver.disconnect();
     };

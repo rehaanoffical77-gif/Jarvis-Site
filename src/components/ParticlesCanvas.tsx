@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+import { checkIsLowEndDevice, getOptimalDPR } from '../utils/performance';
 
 export const ParticlesCanvas: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -16,7 +17,7 @@ export const ParticlesCanvas: React.FC = () => {
     const REPEL_RADIUS = 140;
     const REPEL_STRENGTH = 55;
 
-    let dpr = Math.min(window.devicePixelRatio || 1, 2);
+    let dpr = getOptimalDPR(1.0);
     let w = 0;
     let h = 0;
     const mouse = { x: -9999, y: -9999 };
@@ -55,7 +56,9 @@ export const ParticlesCanvas: React.FC = () => {
 
     const initParticles = () => {
       particles = [];
-      const quantity = Math.round((w * h) / 2200);
+      const isLowEnd = checkIsLowEndDevice();
+      const densityDivider = isLowEnd ? 5000 : 2500;
+      const quantity = Math.round((w * h) / densityDivider);
       for (let i = 0; i < quantity; i++) {
         particles.push(createParticle());
       }
@@ -70,7 +73,7 @@ export const ParticlesCanvas: React.FC = () => {
       if (!canvas.parentElement) return;
       w = canvas.parentElement.clientWidth;
       h = canvas.parentElement.clientHeight;
-      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      dpr = getOptimalDPR(1.0);
 
       canvas.width = w * dpr;
       canvas.height = h * dpr;
@@ -82,7 +85,25 @@ export const ParticlesCanvas: React.FC = () => {
       initParticles();
     };
 
+    let isVisible = true;
+    const intersectionObserver = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        isVisible = entry.isIntersecting;
+        if (isVisible && !animId) {
+          animId = requestAnimationFrame(animate);
+        }
+      }
+    }, { threshold: 0.02 });
+
+    if (canvas.parentElement) {
+      intersectionObserver.observe(canvas.parentElement);
+    }
+
     const animate = () => {
+      if (!isVisible) {
+        animId = 0;
+        return;
+      }
       ctx.clearRect(0, 0, w, h);
 
       for (let i = 0; i < particles.length; i++) {
@@ -167,6 +188,7 @@ export const ParticlesCanvas: React.FC = () => {
 
     return () => {
       cancelAnimationFrame(animId);
+      intersectionObserver.disconnect();
       if (parent) {
         parent.removeEventListener('mousemove', handleMouseMove);
         parent.removeEventListener('mouseleave', handleMouseLeave);

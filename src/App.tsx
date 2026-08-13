@@ -8,6 +8,7 @@ import { ControlSection } from './components/ControlSection';
 import { FooterSection } from './components/FooterSection';
 import { LaunchingSoonModal } from './components/LaunchingSoonModal';
 import { DEFAULT_GALAXY_OPTIONS } from './presets';
+import { triggerApkDownload } from './utils/download';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('Home');
@@ -15,7 +16,8 @@ export default function App() {
 
   const navItems = ['Home', 'Features', 'Vision', 'Control', 'How It Works'];
 
-  const handleOpenModal = () => {
+  const handleDownloadJarvis = () => {
+    triggerApkDownload();
     setIsModalOpen(true);
   };
 
@@ -43,7 +45,7 @@ export default function App() {
 
   return (
     <div className="relative w-full min-h-screen bg-black overflow-x-hidden overflow-y-auto select-none scroll-smooth">
-      {/* Launching Soon Modal Popup */}
+      {/* Launching Soon / App Details Modal Popup */}
       <LaunchingSoonModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
 
       {/* Section 1: Hero Section with Galaxy Canvas */}
@@ -62,7 +64,7 @@ export default function App() {
 
               {/* Mobile/Tablet Download Button (Hidden on Desktop) */}
               <button
-                onClick={handleOpenModal}
+                onClick={handleDownloadJarvis}
                 className="lg:hidden px-3.5 py-1.5 rounded-full border border-white/40 bg-black/80 hover:bg-white/10 text-white text-[10px] sm:text-xs font-bold tracking-widest uppercase transition-all duration-300 shadow-[0_0_12px_rgba(255,255,255,0.2)] hover:shadow-[0_0_20px_rgba(255,255,255,0.5)] active:scale-95 cursor-pointer whitespace-nowrap"
               >
                 DOWNLOAD JARVIS
@@ -100,7 +102,7 @@ export default function App() {
             {/* Right: Desktop Download Button (Hidden on Mobile/Tablet) */}
             <div className="hidden lg:flex items-center lg:w-1/4 justify-end shrink-0">
               <button
-                onClick={handleOpenModal}
+                onClick={handleDownloadJarvis}
                 className="px-5 py-2 rounded-full border border-white/40 bg-black/80 hover:bg-white/10 text-white text-xs font-bold tracking-widest uppercase transition-all duration-300 shadow-[0_0_12px_rgba(255,255,255,0.2)] hover:shadow-[0_0_20px_rgba(255,255,255,0.5)] hover:scale-105 active:scale-95 cursor-pointer whitespace-nowrap"
               >
                 DOWNLOAD JARVIS
@@ -111,7 +113,7 @@ export default function App() {
 
         {/* Home Hero Content */}
         <HeroContent
-          onGetJarvis={handleOpenModal}
+          onGetJarvis={handleDownloadJarvis}
           onExploreFeatures={() => handleNavClick('Features')}
         />
       </section>
@@ -126,10 +128,11 @@ export default function App() {
       <ControlSection />
 
       {/* Section 5: Empty Footer Space */}
-      <FooterSection onGetJarvis={handleOpenModal} />
+      <FooterSection onGetJarvis={handleDownloadJarvis} />
     </div>
   );
 }
+
 
 
 

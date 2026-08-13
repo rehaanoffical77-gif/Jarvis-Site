@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { Renderer, Triangle, Program, Vec3, Mesh } from 'ogl';
 import { GalaxyOptions } from '../types';
+import { checkIsLowEndDevice, getOptimalDPR } from '../utils/performance';
 
 const vertexShader = `
   attribute vec2 uv;
@@ -315,6 +316,8 @@ export const GalaxyCanvas: React.FC<GalaxyCanvasProps> = ({ options, className =
 
     function resize() {
       if (!container) return;
+      const dpr = getOptimalDPR(1.25);
+      renderer.dpr = dpr;
       const width = container.offsetWidth || window.innerWidth;
       const height = container.offsetHeight || window.innerHeight;
       renderer.setSize(width, height);
@@ -329,6 +332,18 @@ export const GalaxyCanvas: React.FC<GalaxyCanvasProps> = ({ options, className =
     resizeObserver.observe(container);
     window.addEventListener('resize', resize, false);
     resize();
+
+    let isVisible = true;
+    const intersectionObserver = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        isVisible = entry.isIntersecting;
+        if (isVisible && !animationFrameId) {
+          animationFrameId = requestAnimationFrame(loop);
+        }
+      }
+    }, { threshold: 0.05 });
+
+    intersectionObserver.observe(container);
 
     let targetMousePos = { x: 0.5, y: 0.5 };
     let smoothMousePos = { x: 0.5, y: 0.5 };
@@ -355,6 +370,10 @@ export const GalaxyCanvas: React.FC<GalaxyCanvasProps> = ({ options, className =
     let animationFrameId: number;
 
     function loop(t: number) {
+      if (!isVisible) {
+        animationFrameId = 0;
+        return;
+      }
       animationFrameId = requestAnimationFrame(loop);
 
       const opts = optionsRef.current;
@@ -405,6 +424,7 @@ export const GalaxyCanvas: React.FC<GalaxyCanvasProps> = ({ options, className =
 
     return () => {
       cancelAnimationFrame(animationFrameId);
+      intersectionObserver.disconnect();
       resizeObserver.disconnect();
       window.removeEventListener('resize', resize);
       container.removeEventListener('pointermove', onPointerMove);

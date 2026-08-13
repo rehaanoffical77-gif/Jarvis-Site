@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+import { checkIsLowEndDevice, getOptimalDPR } from '../utils/performance';
 
 interface FallingBeamsCanvasProps {
   color?: string; // hex color e.g. '#c379ff' or '#ffffff' or '#38bdf8'
@@ -70,7 +71,7 @@ export const FallingBeamsCanvas: React.FC<FallingBeamsCanvasProps> = ({
       #define EPS 1e-6
       #define EDGE_SOFT (DT_LOCAL*4.0)
       #define DT_LOCAL 0.0038
-      #define TAP_RADIUS 6
+      #define TAP_RADIUS 4
       #define R_H 150.0
       #define R_V 150.0
       #define FLARE_HEIGHT 16.0
@@ -83,7 +84,7 @@ export const FallingBeamsCanvas: React.FC<FallingBeamsCanvasProps> = ({
       
       #define W_BASE_X 1.5
       #define W_LAYER_GAP 0.25
-      #define W_LANES 10
+      #define W_LANES 8
       #define W_SIDE_DECAY 0.5
       #define W_HALF 0.01
       #define W_AA 0.15
@@ -96,7 +97,7 @@ export const FallingBeamsCanvas: React.FC<FallingBeamsCanvasProps> = ({
       
       #define FOG_ON 1
       #define FOG_CONTRAST 1.2
-      #define FOG_OCTAVES 5
+      #define FOG_OCTAVES 3
       #define FOG_BOTTOM_BIAS 0.8
       #define FOG_TILT_MAX_X 0.35
       #define FOG_TILT_SHAPE 1.5
@@ -367,7 +368,7 @@ export const FallingBeamsCanvas: React.FC<FallingBeamsCanvasProps> = ({
       const rect = parent.getBoundingClientRect();
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const dpr = getOptimalDPR(1.0);
       mouseX = x * dpr;
       mouseY = (rect.height - y) * dpr;
     };
@@ -384,7 +385,7 @@ export const FallingBeamsCanvas: React.FC<FallingBeamsCanvasProps> = ({
 
     const resize = () => {
       if (!parent) return;
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const dpr = getOptimalDPR(1.0);
       const w = parent.clientWidth;
       const h = parent.clientHeight;
       canvas.width = w * dpr;
@@ -411,7 +412,26 @@ export const FallingBeamsCanvas: React.FC<FallingBeamsCanvasProps> = ({
     }
     resize();
 
+    let isVisible = true;
+    const intersectionObserver = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        isVisible = entry.isIntersecting;
+        if (isVisible && !animId) {
+          animId = requestAnimationFrame(render);
+        }
+      }
+    }, { threshold: 0.02 });
+
+    if (parent) {
+      intersectionObserver.observe(parent);
+    }
+
     const render = (now: number) => {
+      if (!isVisible) {
+        animId = 0;
+        return;
+      }
+
       const dt = Math.max(0, (now - prevTime) / 1000);
       prevTime = now;
       const cdt = Math.min(0.033, Math.max(0.001, dt));
@@ -438,6 +458,7 @@ export const FallingBeamsCanvas: React.FC<FallingBeamsCanvasProps> = ({
 
     return () => {
       cancelAnimationFrame(animId);
+      intersectionObserver.disconnect();
       if (parent) {
         parent.removeEventListener('mousemove', handleMouseMove);
       }

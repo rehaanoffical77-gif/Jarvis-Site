@@ -160,7 +160,7 @@ export const FooterSection: React.FC<FooterSectionProps> = ({ onGetJarvis }) => 
             </h4>
             <div className="flex items-center gap-3">
               <a
-                href="https://github.com"
+                href="https://github.com/rehaanoffical77-gif/Jarvis-Ai"
                 target="_blank"
                 rel="noreferrer"
                 className="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-slate-300 hover:text-white hover:bg-white/10 hover:border-white/30 transition-all duration-200"

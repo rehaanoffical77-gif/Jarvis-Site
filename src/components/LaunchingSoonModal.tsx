@@ -116,7 +116,7 @@ export const LaunchingSoonModal: React.FC<LaunchingSoonModalProps> = ({ isOpen, 
               <div className="w-full space-y-2">
                 <a
                   href={JARVIS_APK_URL}
-                  download="Jarvis-AI-v1.4.0.apk"
+                  download="Jarvis-AI-Release.apk"
                   onClick={handleDownloadClick}
                   className="w-full py-3.5 px-6 rounded-2xl bg-gradient-to-r from-white via-slate-100 to-purple-200 hover:from-purple-100 hover:to-white text-black font-extrabold text-xs sm:text-sm uppercase tracking-widest transition-all duration-300 shadow-[0_0_25px_rgba(255,255,255,0.4)] hover:shadow-[0_0_35px_rgba(195,121,255,0.6)] active:scale-98 cursor-pointer flex items-center justify-center gap-2 group"
                 >

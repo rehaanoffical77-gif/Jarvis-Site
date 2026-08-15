@@ -92,7 +92,7 @@ export const LaunchingSoonModal: React.FC<LaunchingSoonModalProps> = ({ isOpen, 
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
                 </span>
                 <span className="text-[10px] sm:text-xs font-mono font-bold uppercase tracking-widest text-purple-200">
-                  ✨ Version 1.4.0 (Latest Release)
+                  ✨ Version 1.9.0 (Latest Release)
                 </span>
               </div>
 

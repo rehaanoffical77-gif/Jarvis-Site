@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { Camera, Smartphone, Eye, Sparkles } from 'lucide-react';
+import { Camera, Smartphone, Eye, Quote } from 'lucide-react';
 import { SilkCanvas } from './SilkCanvas';
 
 export const VisionSection: React.FC = () => {
@@ -26,10 +26,10 @@ export const VisionSection: React.FC = () => {
   ];
 
   const examplePrompts = [
-    '“What am I looking at?”',
-    '“What’s on my screen?”',
-    '“Read this for me.”',
-    '“What does this say?”',
+    'What am I looking at?',
+    'What’s on my screen?',
+    'Read this for me.',
+    'What does this say?',
   ];
 
   return (
@@ -53,9 +53,9 @@ export const VisionSection: React.FC = () => {
           transition={{ duration: 0.7 }}
           className="space-y-6 text-left max-w-3xl"
         >
-          <div className="inline-flex items-center gap-2 text-xs font-mono tracking-[0.25em] text-slate-400 uppercase">
+          <div className="inline-flex items-center gap-2 text-xs font-mono tracking-[0.25em] text-slate-300 uppercase font-semibold">
             <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
-            <span>JARVIS VISION</span>
+            <span>JARVIS Vision</span>
           </div>
 
           <h2 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-white uppercase leading-[1.05]">
@@ -78,14 +78,14 @@ export const VisionSection: React.FC = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-50px' }}
                 transition={{ duration: 0.5, delay: idx * 0.1 }}
-                className="group relative p-8 rounded-2xl bg-white/[0.02] border border-white/10 hover:border-white/30 backdrop-blur-md transition-all duration-300 flex flex-col justify-between hover:bg-white/[0.04]"
+                className="group relative p-8 rounded-2xl bg-white/[0.03] border border-white/10 hover:border-white/25 backdrop-blur-md transition-all duration-300 flex flex-col justify-between hover:bg-white/[0.06]"
               >
                 <div>
                   <div className="flex items-center justify-between mb-8">
-                    <div className="w-10 h-10 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-white group-hover:scale-105 group-hover:bg-white group-hover:text-black transition-all duration-300">
-                      <Icon className="w-5 h-5" />
+                    <div className="w-11 h-11 rounded-xl bg-white/10 border border-white/20 flex items-center justify-center text-white group-hover:scale-105 group-hover:bg-white group-hover:text-black transition-all duration-300">
+                      <Icon className="w-5 h-5 stroke-[2.25]" />
                     </div>
-                    <span className="text-xs font-mono tracking-widest text-slate-500 font-bold">
+                    <span className="text-xs font-mono tracking-widest text-slate-400 font-bold">
                       {item.number}
                     </span>
                   </div>
@@ -94,7 +94,7 @@ export const VisionSection: React.FC = () => {
                     {item.title}
                   </h3>
 
-                  <p className="text-slate-400 text-sm leading-relaxed font-light">
+                  <p className="text-slate-300 text-sm leading-relaxed font-light">
                     {item.description}
                   </p>
                 </div>
@@ -103,20 +103,20 @@ export const VisionSection: React.FC = () => {
           })}
         </div>
 
-        {/* SMALL EXAMPLES SECTION */}
+        {/* SMALL EXAMPLES SECTION - Clearly styled as voice quote examples */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-50px' }}
           transition={{ duration: 0.6 }}
-          className="pt-8 border-t border-white/10 space-y-8"
+          className="pt-8 border-t border-white/10 space-y-6"
         >
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <h3 className="text-xl sm:text-2xl font-bold text-white tracking-wide">
               Show it. Ask it. Understand it.
             </h3>
-            <span className="text-xs font-mono tracking-widest text-slate-500 uppercase">
-              EXAMPLE PROMPTS
+            <span className="text-xs font-mono tracking-widest text-slate-400 uppercase font-semibold">
+              Example Voice Prompts
             </span>
           </div>
 
@@ -124,17 +124,18 @@ export const VisionSection: React.FC = () => {
             {examplePrompts.map((prompt, i) => (
               <div
                 key={i}
-                className="p-4 rounded-xl bg-white/[0.02] border border-white/10 hover:border-white/25 transition-all duration-200 group"
+                className="flex items-center gap-3 p-4 rounded-xl bg-black/40 border border-white/[0.08]"
               >
-                <p className="text-sm font-mono text-slate-300 group-hover:text-white transition-colors">
-                  {prompt}
+                <Quote className="w-4 h-4 text-slate-500 shrink-0 rotate-180" />
+                <p className="text-sm font-mono text-slate-200">
+                  “{prompt}”
                 </p>
               </div>
             ))}
           </div>
         </motion.div>
 
-        {/* BOTTOM STATEMENT */}
+        {/* BOTTOM STATEMENT - Natural sentence case to resolve Issue 4 */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -142,8 +143,8 @@ export const VisionSection: React.FC = () => {
           transition={{ duration: 0.6 }}
           className="pt-12 text-center border-t border-white/10"
         >
-          <p className="text-2xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white uppercase">
-            See the context. <span className="text-slate-500">Understand the intent.</span>
+          <p className="text-2xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white">
+            See the context. <span className="text-slate-400">Understand the intent.</span>
           </p>
         </motion.div>
 

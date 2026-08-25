@@ -110,8 +110,8 @@ export const FeaturesSection: React.FC = () => {
           className="text-center max-w-2xl mx-auto space-y-4"
         >
           {/* Small Label */}
-          <span className="text-[10px] sm:text-xs font-mono font-bold tracking-[0.32em] uppercase text-slate-400">
-            CAPABILITIES
+          <span className="text-xs font-mono font-bold tracking-[0.25em] uppercase text-slate-300">
+            Capabilities
           </span>
 
           {/* Main Heading */}
@@ -121,7 +121,7 @@ export const FeaturesSection: React.FC = () => {
           </h2>
 
           {/* Supporting Text */}
-          <p className="text-sm sm:text-base text-slate-400 font-normal leading-relaxed pt-1 max-w-xl mx-auto">
+          <p className="text-sm sm:text-base text-slate-300 font-normal leading-relaxed pt-1 max-w-xl mx-auto">
             JARVIS combines real-time voice, vision, research, and Android control in one assistant.
           </p>
         </motion.div>
@@ -141,15 +141,15 @@ export const FeaturesSection: React.FC = () => {
                   delay: (index % 3) * 0.08,
                   ease: [0.16, 1, 0.3, 1],
                 }}
-                className="group relative flex flex-col justify-between p-6 rounded-2xl bg-white/[0.02] border border-white/[0.08] hover:border-white/20 hover:bg-white/[0.04] transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-[0_0_25px_rgba(255,255,255,0.05)]"
+                className="group relative flex flex-col justify-between p-6 rounded-2xl bg-white/[0.03] border border-white/10 hover:border-white/25 hover:bg-white/[0.06] transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-[0_0_25px_rgba(255,255,255,0.08)]"
               >
                 <div className="space-y-4">
                   {/* Icon & Arrow Header */}
                   <div className="flex items-center justify-between">
-                    <div className="w-10 h-10 rounded-xl bg-white/[0.05] border border-white/10 flex items-center justify-center text-slate-300 group-hover:text-white group-hover:border-white/20 group-hover:bg-white/10 transition-all duration-300">
-                      <Icon className="w-5 h-5 stroke-[1.75]" />
+                    <div className="w-11 h-11 rounded-xl bg-white/10 border border-white/20 flex items-center justify-center text-white shadow-sm shadow-black/40 group-hover:scale-105 group-hover:bg-white group-hover:text-black transition-all duration-300">
+                      <Icon className="w-5 h-5 stroke-[2.25]" />
                     </div>
-                    <ArrowUpRight className="w-4 h-4 text-slate-600 group-hover:text-slate-300 transition-colors duration-300" />
+                    <ArrowUpRight className="w-4 h-4 text-slate-500 group-hover:text-slate-200 transition-colors duration-300" />
                   </div>
 
                   {/* Title & Description */}
@@ -157,7 +157,7 @@ export const FeaturesSection: React.FC = () => {
                     <h3 className="text-base sm:text-lg font-bold text-white tracking-wide">
                       {feature.title}
                     </h3>
-                    <p className="text-xs sm:text-sm text-slate-400 font-light leading-relaxed">
+                    <p className="text-xs sm:text-sm text-slate-300 font-light leading-relaxed">
                       {feature.description}
                     </p>
                   </div>

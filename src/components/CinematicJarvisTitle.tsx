@@ -6,11 +6,14 @@ export const CinematicJarvisTitle: React.FC = () => {
       {/* Background ambient light streak behind title - ultra subtle */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full sm:w-3/4 h-24 bg-white/[0.03] blur-3xl rounded-full pointer-events-none" />
 
+      {/* Semantic Accessible H1 Heading for screen readers and search engines */}
+      <h1 className="sr-only">JARVIS AI — Intelligent Assistant for Android</h1>
+
       {/* SVG Cinematic Textured Title - Larger on Mobile */}
       <svg
         viewBox="0 0 920 200"
         className="w-[108%] -mx-[4%] sm:w-full sm:mx-0 h-auto max-h-[210px] xs:max-h-[230px] sm:max-h-[230px] md:max-h-[280px] overflow-visible drop-shadow-[0_0_25px_rgba(255,255,255,0.12)]"
-        aria-label="JARVIS"
+        aria-hidden="true"
       >
         <defs>
           {/* Weathered Metallic Micro-Noise Texture */}

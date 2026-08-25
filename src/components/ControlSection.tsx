@@ -11,7 +11,19 @@ import {
 } from 'lucide-react';
 import { ParticlesCanvas } from './ParticlesCanvas';
 
-export const ControlSection: React.FC = () => {
+interface ControlSectionProps {
+  onGetJarvis?: () => void;
+}
+
+export const ControlSection: React.FC<ControlSectionProps> = ({ onGetJarvis }) => {
+  const handleGetJarvis = () => {
+    if (onGetJarvis) {
+      onGetJarvis();
+    } else {
+      alert('Downloading JARVIS...');
+    }
+  };
+
   const cards = [
     {
       icon: LayoutGrid,
@@ -70,9 +82,9 @@ export const ControlSection: React.FC = () => {
           transition={{ duration: 0.5 }}
           className="text-left space-y-4 max-w-3xl"
         >
-          <div className="inline-flex items-center gap-2 text-xs font-mono tracking-[0.25em] text-slate-400 uppercase">
+          <div className="inline-flex items-center gap-2 text-xs font-mono tracking-[0.25em] text-slate-300 uppercase font-semibold">
             <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
-            <span>JARVIS CONTROL</span>
+            <span>JARVIS Control</span>
           </div>
 
           <h2 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white uppercase leading-tight">
@@ -95,24 +107,24 @@ export const ControlSection: React.FC = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-40px' }}
                 transition={{ duration: 0.4, delay: idx * 0.08 }}
-                className="group relative p-7 rounded-2xl bg-white/[0.02] border border-white/10 hover:border-white/30 backdrop-blur-md transition-all duration-300 flex flex-col justify-between hover:-translate-y-1 hover:bg-white/[0.04]"
+                className="group relative p-7 rounded-2xl bg-white/[0.03] border border-white/10 hover:border-white/25 backdrop-blur-md transition-all duration-300 flex flex-col justify-between hover:-translate-y-1 hover:bg-white/[0.06]"
               >
                 <div>
-                  <div className="w-10 h-10 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-white group-hover:scale-105 group-hover:bg-white group-hover:text-black transition-all duration-300 mb-6">
-                    <Icon className="w-5 h-5" />
+                  <div className="w-11 h-11 rounded-xl bg-white/10 border border-white/20 flex items-center justify-center text-white group-hover:scale-105 group-hover:bg-white group-hover:text-black transition-all duration-300 mb-6">
+                    <Icon className="w-5 h-5 stroke-[2.25]" />
                   </div>
 
                   <h3 className="text-xl font-bold text-white mb-2 tracking-wide">
                     {card.title}
                   </h3>
 
-                  <p className="text-slate-400 text-sm font-light leading-relaxed mb-6">
+                  <p className="text-slate-300 text-sm font-light leading-relaxed mb-6">
                     {card.description}
                   </p>
                 </div>
 
-                <div className="pt-4 border-t border-white/[0.06] flex items-center justify-between gap-3">
-                  <span className="text-xs font-mono text-slate-300 bg-white/[0.03] border border-white/10 px-2.5 py-1 rounded-md truncate max-w-[85%]">
+                <div className="pt-4 border-t border-white/[0.08] flex items-center justify-between gap-3">
+                  <span className="text-xs font-mono text-slate-200 bg-white/[0.05] border border-white/10 px-2.5 py-1.5 rounded-lg leading-snug">
                     {card.example}
                   </span>
                   <ArrowUpRight className="w-4 h-4 text-slate-500 group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-200 shrink-0" />
@@ -130,24 +142,24 @@ export const ControlSection: React.FC = () => {
           transition={{ duration: 0.5 }}
           className="pt-12 border-t border-white/10 text-center space-y-4 max-w-2xl mx-auto"
         >
-          <span className="text-xs font-mono tracking-[0.2em] text-slate-400 uppercase font-semibold">
-            VOICE → ACTION
+          <span className="text-xs font-mono tracking-[0.2em] text-slate-300 uppercase font-semibold">
+            Voice → Action
           </span>
 
           <h3 className="text-2xl sm:text-4xl font-extrabold text-white tracking-tight">
             Your phone, at your command.
           </h3>
 
-          <p className="text-slate-400 text-sm sm:text-base font-light leading-relaxed">
+          <p className="text-slate-300 text-sm sm:text-base font-light leading-relaxed">
             Speak naturally. JARVIS interprets your request and uses supported Android capabilities to perform the action.
           </p>
 
-          <p className="text-xs font-mono text-slate-500 uppercase tracking-wider pt-2">
+          <p className="text-xs font-mono text-slate-400 uppercase tracking-wider pt-2">
             Powered by Android Accessibility
           </p>
         </motion.div>
 
-        {/* FINAL CTA */}
+        {/* FINAL CTA - Standardized solid primary button to resolve Issue 15 */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -161,8 +173,8 @@ export const ControlSection: React.FC = () => {
 
           <div>
             <button
-              onClick={() => alert('Downloading JARVIS...')}
-              className="px-7 py-3 rounded-full border border-white/40 bg-black hover:bg-white hover:text-black text-white text-xs sm:text-sm font-bold tracking-widest uppercase transition-all duration-300 shadow-[0_0_15px_rgba(255,255,255,0.15)] hover:shadow-[0_0_25px_rgba(255,255,255,0.4)] hover:scale-105 active:scale-95 cursor-pointer"
+              onClick={handleGetJarvis}
+              className="px-7 py-3 rounded-full bg-white hover:bg-slate-100 text-black text-xs sm:text-sm font-bold tracking-widest uppercase transition-all duration-300 shadow-[0_0_20px_rgba(255,255,255,0.25)] hover:shadow-[0_0_30px_rgba(255,255,255,0.45)] hover:scale-105 active:scale-95 cursor-pointer"
             >
               GET JARVIS
             </button>

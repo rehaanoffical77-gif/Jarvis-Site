@@ -65,7 +65,7 @@ export default function App() {
               {/* Mobile/Tablet Download Button (Hidden on Desktop) */}
               <button
                 onClick={handleDownloadJarvis}
-                className="lg:hidden px-3.5 py-1.5 rounded-full border border-white/40 bg-black/80 hover:bg-white/10 text-white text-[10px] sm:text-xs font-bold tracking-widest uppercase transition-all duration-300 shadow-[0_0_12px_rgba(255,255,255,0.2)] hover:shadow-[0_0_20px_rgba(255,255,255,0.5)] active:scale-95 cursor-pointer whitespace-nowrap"
+                className="lg:hidden px-4 py-1.5 rounded-full bg-white hover:bg-slate-100 text-black text-xs font-bold tracking-wider uppercase transition-all duration-300 shadow-[0_0_12px_rgba(255,255,255,0.25)] hover:shadow-[0_0_20px_rgba(255,255,255,0.45)] active:scale-95 cursor-pointer whitespace-nowrap"
               >
                 DOWNLOAD JARVIS
               </button>
@@ -103,7 +103,7 @@ export default function App() {
             <div className="hidden lg:flex items-center lg:w-1/4 justify-end shrink-0">
               <button
                 onClick={handleDownloadJarvis}
-                className="px-5 py-2 rounded-full border border-white/40 bg-black/80 hover:bg-white/10 text-white text-xs font-bold tracking-widest uppercase transition-all duration-300 shadow-[0_0_12px_rgba(255,255,255,0.2)] hover:shadow-[0_0_20px_rgba(255,255,255,0.5)] hover:scale-105 active:scale-95 cursor-pointer whitespace-nowrap"
+                className="px-5 py-2 rounded-full bg-white hover:bg-slate-100 text-black text-xs font-bold tracking-wider uppercase transition-all duration-300 shadow-[0_0_15px_rgba(255,255,255,0.25)] hover:shadow-[0_0_25px_rgba(255,255,255,0.45)] hover:scale-105 active:scale-95 cursor-pointer whitespace-nowrap"
               >
                 DOWNLOAD JARVIS
               </button>
@@ -125,7 +125,7 @@ export default function App() {
       <VisionSection />
 
       {/* Section 4: Control Section with Clean Black Screen */}
-      <ControlSection />
+      <ControlSection onGetJarvis={handleDownloadJarvis} />
 
       {/* Section 5: Empty Footer Space */}
       <FooterSection onGetJarvis={handleDownloadJarvis} />

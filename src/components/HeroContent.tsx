@@ -67,10 +67,10 @@ const BoxButton: React.FC<BoxButtonProps> = ({ onClick, primary = false, childre
       animate={{ x: offset.x, y: offset.y }}
       whileTap={{ scale: 0.92 }}
       transition={{ type: 'spring', stiffness: 260, damping: 16 }}
-      className={`relative group overflow-hidden w-full sm:w-auto px-8 py-3.5 rounded-2xl font-bold text-xs sm:text-sm tracking-widest uppercase transition-all duration-300 cursor-pointer border select-none active:scale-95 ${
+      className={`relative group overflow-hidden w-full sm:w-auto px-7 py-3 rounded-full font-bold text-xs sm:text-sm tracking-widest uppercase transition-all duration-300 cursor-pointer border select-none active:scale-95 ${
         primary
-          ? 'bg-white text-black border-white hover:border-slate-200 shadow-[0_0_20px_rgba(255,255,255,0.25)] hover:shadow-[0_0_30px_rgba(255,255,255,0.45)]'
-          : 'bg-black/60 text-white border-white/30 hover:border-white/70 shadow-[0_0_15px_rgba(0,0,0,0.5)] backdrop-blur-sm'
+          ? 'bg-white text-black border-white hover:bg-slate-100 shadow-[0_0_20px_rgba(255,255,255,0.25)] hover:shadow-[0_0_30px_rgba(255,255,255,0.45)]'
+          : 'bg-black/80 text-white border-white/40 hover:bg-white/10 shadow-[0_0_15px_rgba(0,0,0,0.5)] backdrop-blur-sm'
       }`}
     >
       {/* Mobile-only ambient pulse shimmer animation */}
@@ -82,7 +82,7 @@ const BoxButton: React.FC<BoxButtonProps> = ({ onClick, primary = false, childre
           initial={{ opacity: 0.6, scale: 0.8 }}
           animate={{ opacity: 0, scale: 1.4 }}
           transition={{ duration: 0.4 }}
-          className={`sm:hidden absolute inset-0 rounded-2xl pointer-events-none ${
+          className={`sm:hidden absolute inset-0 rounded-full pointer-events-none ${
             primary ? 'bg-black/25' : 'bg-white/35'
           }`}
         />
@@ -91,7 +91,7 @@ const BoxButton: React.FC<BoxButtonProps> = ({ onClick, primary = false, childre
       {/* Mouse Tracker Glow Effect - Hidden on Mobile */}
       {isHovered && (
         <span
-          className="pointer-events-none absolute -inset-px transition-opacity duration-300 rounded-2xl hidden sm:block"
+          className="pointer-events-none absolute -inset-px transition-opacity duration-300 rounded-full hidden sm:block"
           style={{
             background: primary
               ? `radial-gradient(130px circle at ${mousePos.x}px ${mousePos.y}px, rgba(0,0,0,0.18), transparent 70%)`
@@ -180,7 +180,7 @@ export const HeroContent: React.FC<HeroContentProps> = ({
 
           {/* Secondary CTA */}
           <BoxButton onClick={handleExploreFeatures}>
-            EXPLORE FEATURES
+            Explore Features
           </BoxButton>
         </motion.div>
 
@@ -189,15 +189,15 @@ export const HeroContent: React.FC<HeroContentProps> = ({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.7, delay: 0.55 }}
-          className="pt-2 sm:pt-3 text-[10px] sm:text-xs font-medium tracking-[0.22em] uppercase text-slate-500 flex items-center justify-center gap-2 sm:gap-3 flex-wrap"
+          className="pt-2 sm:pt-3 text-xs font-medium tracking-[0.2em] uppercase text-slate-400 flex items-center justify-center gap-2 sm:gap-3 flex-wrap"
         >
-          <span>VOICE</span>
-          <span className="text-slate-700">·</span>
-          <span>VISION</span>
-          <span className="text-slate-700">·</span>
-          <span>RESEARCH</span>
-          <span className="text-slate-700">·</span>
-          <span>ANDROID CONTROL</span>
+          <span>Voice</span>
+          <span className="text-slate-600">·</span>
+          <span>Vision</span>
+          <span className="text-slate-600">·</span>
+          <span>Research</span>
+          <span className="text-slate-600">·</span>
+          <span>Android Control</span>
         </motion.div>
 
         {/* Cinematic Tagline */}
@@ -208,8 +208,8 @@ export const HeroContent: React.FC<HeroContentProps> = ({
           className="pt-4 sm:pt-6 flex flex-col items-center"
         >
           {/* Tagline */}
-          <span className="text-[10px] sm:text-xs font-semibold tracking-[0.32em] uppercase text-slate-400/90 text-center px-4">
-            BUILT TO LISTEN. DESIGNED TO ACT.
+          <span className="text-xs font-semibold tracking-[0.25em] uppercase text-slate-300 text-center px-4">
+            Built to listen. Designed to act.
           </span>
         </motion.div>
       </motion.div>

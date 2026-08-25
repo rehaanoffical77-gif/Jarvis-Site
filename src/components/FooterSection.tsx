@@ -34,40 +34,40 @@ export const FooterSection: React.FC<FooterSectionProps> = ({ onGetJarvis }) => 
 
       <div className="relative z-10 max-w-6xl mx-auto px-6 md:px-12 lg:px-16 pt-16 sm:pt-20 pb-12 space-y-16">
         
-        {/* COMPACT FOOTER CTA */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-6 pb-12 border-b border-white/10">
-          <h3 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white uppercase text-center sm:text-left">
+        {/* COMPACT FOOTER CTA - Centered & Close Proximity to resolve Issue 11, Sentence Case for Issue 8, H2 for Issue 10, Solid button for Issue 15 */}
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-8 pb-12 border-b border-white/10 text-center">
+          <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">
             Ready to meet JARVIS?
-          </h3>
+          </h2>
           <button
             onClick={handleGetJarvis}
-            className="px-6 py-2.5 rounded-full border border-white/40 bg-black hover:bg-white hover:text-black text-white text-xs font-bold tracking-widest uppercase transition-all duration-300 shadow-[0_0_12px_rgba(255,255,255,0.15)] hover:shadow-[0_0_20px_rgba(255,255,255,0.4)] hover:scale-105 active:scale-95 cursor-pointer whitespace-nowrap shrink-0"
+            className="px-7 py-3 rounded-full bg-white hover:bg-slate-100 text-black text-xs sm:text-sm font-bold tracking-widest uppercase transition-all duration-300 shadow-[0_0_20px_rgba(255,255,255,0.25)] hover:shadow-[0_0_30px_rgba(255,255,255,0.45)] hover:scale-105 active:scale-95 cursor-pointer whitespace-nowrap shrink-0"
           >
             GET JARVIS
           </button>
         </div>
 
-        {/* FOOTER COLUMNS */}
+        {/* FOOTER COLUMNS - Proper H3 levels for Issue 10 */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 lg:gap-8">
           
           {/* LEFT — BRAND (Spans 2 columns on desktop) */}
           <div className="lg:col-span-2 space-y-4">
-            <h2 className="text-2xl font-black tracking-widest uppercase text-white">
+            <h3 className="text-2xl font-black tracking-widest uppercase text-white">
               JARVIS
-            </h2>
+            </h3>
             <p className="text-sm text-slate-300 font-light">
               Your AI companion for Android.
             </p>
-            <p className="text-xs font-mono tracking-widest text-slate-500 uppercase">
+            <p className="text-xs font-mono tracking-widest text-slate-400 uppercase">
               Voice. Vision. Control.
             </p>
           </div>
 
           {/* EXPLORE */}
           <div className="space-y-4">
-            <h4 className="text-xs font-mono tracking-[0.2em] text-slate-400 uppercase font-semibold">
+            <h3 className="text-xs font-mono tracking-[0.2em] text-slate-300 uppercase font-semibold">
               EXPLORE
-            </h4>
+            </h3>
             <ul className="space-y-2.5 text-sm font-light text-slate-300">
               <li>
                 <button
@@ -114,9 +114,9 @@ export const FooterSection: React.FC<FooterSectionProps> = ({ onGetJarvis }) => 
 
           {/* PRODUCT */}
           <div className="space-y-4">
-            <h4 className="text-xs font-mono tracking-[0.2em] text-slate-400 uppercase font-semibold">
+            <h3 className="text-xs font-mono tracking-[0.2em] text-slate-300 uppercase font-semibold">
               JARVIS
-            </h4>
+            </h3>
             <ul className="space-y-2.5 text-sm font-light text-slate-300">
               <li>
                 <button
@@ -155,9 +155,9 @@ export const FooterSection: React.FC<FooterSectionProps> = ({ onGetJarvis }) => 
 
           {/* CONNECT */}
           <div className="space-y-4">
-            <h4 className="text-xs font-mono tracking-[0.2em] text-slate-400 uppercase font-semibold">
+            <h3 className="text-xs font-mono tracking-[0.2em] text-slate-300 uppercase font-semibold">
               CONNECT
-            </h4>
+            </h3>
             <div className="flex items-center gap-3">
               <a
                 href="https://github.com/rehaanoffical77-gif/Jarvis-Ai"

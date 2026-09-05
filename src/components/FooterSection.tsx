@@ -1,6 +1,6 @@
-import React from 'react';
-import { motion } from 'motion/react';
-import { Instagram, Youtube, Github } from 'lucide-react';
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
+import { Instagram, Youtube, Github, X } from 'lucide-react';
 import { FallingBeamsCanvas } from './FallingBeamsCanvas';
 
 interface FooterSectionProps {
@@ -8,11 +8,11 @@ interface FooterSectionProps {
 }
 
 export const FooterSection: React.FC<FooterSectionProps> = ({ onGetJarvis }) => {
+  const [isGitHubModalOpen, setIsGitHubModalOpen] = useState(false);
+
   const handleGetJarvis = () => {
     if (onGetJarvis) {
       onGetJarvis();
-    } else {
-      alert('Downloading JARVIS...');
     }
   };
 
@@ -159,30 +159,32 @@ export const FooterSection: React.FC<FooterSectionProps> = ({ onGetJarvis }) => 
               CONNECT
             </h3>
             <div className="flex items-center gap-3">
-              <a
-                href="https://github.com/rehaanoffical77-gif/Jarvis-Ai"
-                target="_blank"
-                rel="noreferrer"
-                className="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-slate-300 hover:text-white hover:bg-white/10 hover:border-white/30 transition-all duration-200"
-                aria-label="GitHub"
+              <button
+                type="button"
+                onClick={() => setIsGitHubModalOpen(true)}
+                className="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-slate-300 hover:text-white hover:bg-white/10 hover:border-white/30 transition-all duration-200 cursor-pointer"
+                aria-label="GitHub Repository"
+                title="GitHub Repository"
               >
                 <Github className="w-4 h-4" />
-              </a>
+              </button>
               <a
-                href="https://youtube.com"
+                href="https://www.youtube.com/@TechGPTX"
                 target="_blank"
                 rel="noreferrer"
                 className="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-slate-300 hover:text-white hover:bg-white/10 hover:border-white/30 transition-all duration-200"
-                aria-label="YouTube"
+                aria-label="YouTube Channel (@TechGPTX)"
+                title="YouTube (@TechGPTX)"
               >
                 <Youtube className="w-4 h-4" />
               </a>
               <a
-                href="https://instagram.com"
+                href="https://www.instagram.com/techgptx.ai"
                 target="_blank"
                 rel="noreferrer"
                 className="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-slate-300 hover:text-white hover:bg-white/10 hover:border-white/30 transition-all duration-200"
-                aria-label="Instagram"
+                aria-label="Instagram (@techgptx.ai)"
+                title="Instagram (@techgptx.ai)"
               >
                 <Instagram className="w-4 h-4" />
               </a>
@@ -198,6 +200,74 @@ export const FooterSection: React.FC<FooterSectionProps> = ({ onGetJarvis }) => 
         </div>
 
       </div>
+
+      {/* GitHub Not Added Yet Notice Modal */}
+      <AnimatePresence>
+        {isGitHubModalOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsGitHubModalOpen(false)}
+              className="fixed inset-0 bg-black/85 backdrop-blur-md cursor-pointer"
+            />
+
+            {/* Modal Dialog */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+              className="relative w-full max-w-sm bg-black text-white border border-white/20 rounded-3xl p-6 sm:p-7 shadow-[0_0_50px_rgba(0,0,0,0.95)] z-10 overflow-hidden my-auto text-center"
+            >
+              {/* Close Button */}
+              <button
+                type="button"
+                onClick={() => setIsGitHubModalOpen(false)}
+                className="absolute top-4 right-4 p-2 rounded-full bg-white/5 border border-white/15 hover:bg-white/20 text-slate-400 hover:text-white transition-all cursor-pointer"
+                aria-label="Close modal"
+              >
+                <X className="w-4 h-4" />
+              </button>
+
+              {/* Icon Frame */}
+              <div className="w-14 h-14 rounded-2xl bg-white/10 border border-white/20 flex items-center justify-center mx-auto mb-3.5 shadow-[0_0_20px_rgba(255,255,255,0.08)]">
+                <Github className="w-7 h-7 text-white" />
+              </div>
+
+              {/* Status Badge */}
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-amber-500/30 bg-amber-500/10 text-amber-300 text-[11px] font-mono font-bold uppercase tracking-wider mb-2.5">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-400"></span>
+                </span>
+                <span>Adding Soon</span>
+              </div>
+
+              {/* Title */}
+              <h3 className="text-xl font-extrabold uppercase tracking-tight text-white mb-2">
+                GitHub Not Added Yet
+              </h3>
+
+              {/* Description */}
+              <p className="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-xs mx-auto mb-6">
+                The official GitHub repository for JARVIS AI has not been added yet. We are preparing the public codebase and documentation — it will be added very soon!
+              </p>
+
+              {/* Action Button */}
+              <button
+                type="button"
+                onClick={() => setIsGitHubModalOpen(false)}
+                className="w-full py-3 px-6 rounded-xl bg-white hover:bg-slate-200 text-black font-extrabold text-xs uppercase tracking-widest transition-all duration-200 shadow-[0_0_20px_rgba(255,255,255,0.25)] hover:shadow-[0_0_30px_rgba(255,255,255,0.45)] active:scale-98 cursor-pointer"
+              >
+                Got It
+              </button>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </footer>
   );
 };

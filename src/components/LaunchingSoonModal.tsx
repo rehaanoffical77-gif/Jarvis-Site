@@ -4,7 +4,6 @@ import {
   X,
   Sparkles,
   CheckCircle2,
-  Bot,
   ShieldCheck,
   Download,
   HardDrive,
@@ -164,10 +163,14 @@ export const LaunchingSoonModal: React.FC<LaunchingSoonModalProps> = ({ isOpen, 
                 )}
               </div>
 
-              {/* Bot Icon Frame */}
-              <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-black/50 border border-white/20 backdrop-blur-md flex items-center justify-center shadow-[0_0_25px_rgba(0,0,0,0.8)]">
-                <Bot className="w-8 h-8 sm:w-10 sm:h-10 text-white animate-pulse" />
-                <Sparkles className="w-4 h-4 text-white absolute -top-1 -right-1" />
+              {/* App Logo Frame */}
+              <div className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-black/60 border border-cyan-500/40 backdrop-blur-md flex items-center justify-center shadow-[0_0_30px_rgba(6,182,212,0.35)] overflow-hidden">
+                <img
+                  src="/apk-logo.png"
+                  alt="JARVIS AI Logo"
+                  referrerPolicy="no-referrer"
+                  className="w-full h-full object-contain p-1 drop-shadow-[0_0_15px_rgba(6,182,212,0.6)]"
+                />
               </div>
 
               {/* Title & Subtitle */}

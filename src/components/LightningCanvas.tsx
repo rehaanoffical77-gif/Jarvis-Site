@@ -126,38 +126,20 @@ export const LightningCanvas: React.FC<LightningCanvasProps> = ({
       }
 
       void mainImage(out vec4 fragColor, in vec2 fragCoord) {
-        // Normalized coordinates: -1.0 at left, 0.0 at center, +1.0 at right
-        vec2 normUV = (fragCoord - 0.5 * iResolution.xy) / (0.5 * iResolution.xy);
-        
-        // Aspect ratio for natural fractal noise frequency without distortion
-        float aspect = iResolution.x / max(iResolution.y, 1.0);
-        vec2 noiseCoord = vec2(normUV.x * aspect * 1.4, normUV.y * 1.4) * uSize;
-        
-        // Multi-octave fractal displacement contained nicely within screen bounds
-        float disp = (fbm(noiseCoord + vec2(0.0, 0.85 * iTime * uSpeed)) - 0.5) * 0.55;
-        
-        // Center bolt at normUV.x = uXOffset (stays centered on mobile and desktop)
-        float boltX = normUV.x - uXOffset - disp;
-        float dist = abs(boltX);
-
-        // Core lightning bolt and outer plasma glow with safe non-zero denominators
-        float core = 0.016 / (dist + 0.007);
-        float glow = 0.065 / (dist + 0.09);
-
-        // Electric lightning flicker
-        float strikeFlash = mix(0.75, 1.25, hash11(floor(iTime * 16.0 * uSpeed)));
-        
-        vec3 baseColor = hsv2rgb(vec3(uHue / 360.0, 0.75, 0.9));
-        vec3 col = (baseColor * glow + vec3(1.0) * core * 0.65 + baseColor * core * 0.35) * strikeFlash * uIntensity;
-        
-        // Edge containment so lightning doesn't bleed harshly against box edges
-        float edgeVignette = clamp(1.0 - abs(normUV.x) * 0.15, 0.0, 1.0);
-        col *= edgeVignette;
+        vec2 uv = fragCoord / iResolution.xy;
+        uv = 2.0 * uv - 1.0;
+        uv.x *= iResolution.x / iResolution.y;
+        uv.x += uXOffset;
+        uv += 2.0 * fbm(uv * uSize + 0.8 * iTime * uSpeed) - 1.0;
+        float dist = abs(uv.x);
+        vec3 baseColor = hsv2rgb(vec3(uHue / 360.0, 0.7, 0.8));
+        vec3 col = baseColor * pow(mix(0.0, 0.07, hash11(iTime * uSpeed)) / dist, 1.0) * uIntensity;
+        col = pow(col, vec3(1.0));
 
         ${
           transparent
             ? `
-          float alpha = clamp(glow * 2.2 + core * 3.0, 0.0, 1.0);
+          float alpha = clamp(1.0 - dist * 3.0, 0.0, 1.0);
           fragColor = vec4(col, alpha);
         `
             : 'fragColor = vec4(col, 1.0);'

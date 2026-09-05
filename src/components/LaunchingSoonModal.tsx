@@ -120,15 +120,15 @@ export const LaunchingSoonModal: React.FC<LaunchingSoonModalProps> = ({ isOpen, 
               hue={230}
               xOffset={0.0}
               speed={1.0}
-              intensity={1.15}
+              intensity={1.35}
               size={1.0}
               transparent={false}
-              hueCycleSpeed={18}
+              hueCycleSpeed={20}
               className="absolute inset-0 w-full h-full pointer-events-none"
             />
 
             {/* Dark contrast scrim to keep text and controls crisp over lightning */}
-            <div className="absolute inset-0 bg-black/65 backdrop-blur-[0.5px] pointer-events-none" />
+            <div className="absolute inset-0 bg-black/45 pointer-events-none" />
 
             {/* Close Button */}
             <button

@@ -68,7 +68,12 @@ export const LightningCanvas: React.FC<LightningCanvasProps> = ({
     `;
 
     const fragmentShaderSource = `
+      #ifdef GL_FRAGMENT_PRECISION_HIGH
+      precision highp float;
+      #else
       precision mediump float;
+      #endif
+
       uniform vec2 iResolution;
       uniform float iTime;
       uniform float uHue;
@@ -84,6 +89,7 @@ export const LightningCanvas: React.FC<LightningCanvasProps> = ({
       }
 
       float hash11(float p) {
+        p = mod(p, 1000.0);
         p = fract(p * .1031);
         p *= p + 33.33;
         p *= p + p;
@@ -91,6 +97,7 @@ export const LightningCanvas: React.FC<LightningCanvasProps> = ({
       }
 
       float hash12(vec2 p) {
+        p = mod(p, vec2(1000.0));
         vec3 p3 = fract(vec3(p.xyx) * .1031);
         p3 += dot(p3, p3.yzx + 33.33);
         return fract((p3.x + p3.y) * p3.z);
@@ -128,7 +135,8 @@ export const LightningCanvas: React.FC<LightningCanvasProps> = ({
       void mainImage(out vec4 fragColor, in vec2 fragCoord) {
         vec2 uv = fragCoord / iResolution.xy;
         uv = 2.0 * uv - 1.0;
-        uv.x *= iResolution.x / iResolution.y;
+        float aspect = iResolution.x / iResolution.y;
+        uv.x *= max(aspect, 1.4);
         uv.x += uXOffset;
         uv += 2.0 * fbm(uv * uSize + 0.8 * iTime * uSpeed) - 1.0;
         float dist = abs(uv.x);

@@ -113,22 +113,22 @@ export const LaunchingSoonModal: React.FC<LaunchingSoonModalProps> = ({ isOpen, 
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-            className="relative w-full max-w-lg bg-black text-white border border-white/20 rounded-3xl p-6 sm:p-8 shadow-[0_0_60px_rgba(0,0,0,0.95)] z-10 overflow-hidden my-auto"
+            className="relative w-full max-w-lg bg-black text-white border border-white/20 rounded-3xl p-4 sm:p-8 shadow-[0_0_60px_rgba(0,0,0,0.95)] z-10 overflow-hidden my-auto"
           >
             {/* Total Box WebGL Lightning Effect */}
             <LightningCanvas
               hue={230}
-              xOffset={-0.25}
+              xOffset={0.0}
               speed={1.0}
-              intensity={1.35}
+              intensity={1.15}
               size={1.0}
               transparent={false}
-              hueCycleSpeed={20}
+              hueCycleSpeed={18}
               className="absolute inset-0 w-full h-full pointer-events-none"
             />
 
-            {/* Dark overlay to keep text/controls readable over lightning */}
-            <div className="absolute inset-0 bg-black/50 pointer-events-none" />
+            {/* Dark contrast scrim to keep text and controls crisp over lightning */}
+            <div className="absolute inset-0 bg-black/65 backdrop-blur-[0.5px] pointer-events-none" />
 
             {/* Close Button */}
             <button

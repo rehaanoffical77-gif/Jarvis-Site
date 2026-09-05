@@ -8,7 +8,6 @@ import { ControlSection } from './components/ControlSection';
 import { FooterSection } from './components/FooterSection';
 import { LaunchingSoonModal } from './components/LaunchingSoonModal';
 import { DEFAULT_GALAXY_OPTIONS } from './presets';
-import { triggerApkDownload } from './utils/download';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('Home');
@@ -17,7 +16,6 @@ export default function App() {
   const navItems = ['Home', 'Features', 'Vision', 'Control', 'How It Works'];
 
   const handleDownloadJarvis = () => {
-    triggerApkDownload();
     setIsModalOpen(true);
   };
 

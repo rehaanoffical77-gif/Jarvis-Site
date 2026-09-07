@@ -12,6 +12,7 @@ import {
   Loader2,
 } from 'lucide-react';
 import { LightningCanvas } from './LightningCanvas';
+import { AdSenseBanner } from './AdSenseBanner';
 import {
   AppVersionInfo,
   DEFAULT_APP_VERSION,
@@ -29,6 +30,8 @@ export const LaunchingSoonModal: React.FC<LaunchingSoonModalProps> = ({ isOpen, 
   const [email, setEmail] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [downloadStarted, setDownloadStarted] = useState(false);
+  const [isShowingAdScreen, setIsShowingAdScreen] = useState(false);
+  const [adCountdown, setAdCountdown] = useState(3);
   const [versionInfo, setVersionInfo] = useState<AppVersionInfo>(DEFAULT_APP_VERSION);
   const [isLoadingVersion, setIsLoadingVersion] = useState(true);
 
@@ -50,6 +53,8 @@ export const LaunchingSoonModal: React.FC<LaunchingSoonModalProps> = ({ isOpen, 
       document.body.style.overflow = 'hidden';
       setIsLoadingVersion(true);
       setDownloadStarted(false);
+      setIsShowingAdScreen(false);
+      setAdCountdown(3);
 
       fetchLatestAppVersion()
         .then((data) => {
@@ -68,6 +73,8 @@ export const LaunchingSoonModal: React.FC<LaunchingSoonModalProps> = ({ isOpen, 
       setIsSubmitted(false);
       setEmail('');
       setDownloadStarted(false);
+      setIsShowingAdScreen(false);
+      setAdCountdown(3);
     }
 
     return () => {
@@ -75,10 +82,41 @@ export const LaunchingSoonModal: React.FC<LaunchingSoonModalProps> = ({ isOpen, 
     };
   }, [isOpen]);
 
-  const handleDownloadClick = () => {
+  const handleImmediateDownload = () => {
     const targetUrl = versionInfo.downloadUrl || versionInfo.apkUrl || JARVIS_APK_URL;
     triggerApkDownload(targetUrl);
     setDownloadStarted(true);
+    setIsShowingAdScreen(false);
+  };
+
+  // Countdown timer for sponsored ad screen
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+    if (isShowingAdScreen && adCountdown > 0) {
+      timer = setTimeout(() => {
+        setAdCountdown((prev) => prev - 1);
+      }, 1000);
+    } else if (isShowingAdScreen && adCountdown <= 0) {
+      handleImmediateDownload();
+    }
+    return () => clearTimeout(timer);
+  }, [isShowingAdScreen, adCountdown, versionInfo]);
+
+  const handleDownloadClick = () => {
+    if (!isShowingAdScreen && !downloadStarted) {
+      try {
+        if (typeof window !== 'undefined') {
+          window.adsbygoogle = window.adsbygoogle || [];
+          window.adsbygoogle.push({});
+        }
+      } catch {
+        // Safe catch
+      }
+      setIsShowingAdScreen(true);
+      setAdCountdown(3);
+      return;
+    }
+    handleImmediateDownload();
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -141,136 +179,201 @@ export const LaunchingSoonModal: React.FC<LaunchingSoonModalProps> = ({ isOpen, 
             {/* Content Body */}
             <div className="relative z-10 flex flex-col items-center text-center space-y-4">
               
-              {/* Top Animated Version Badge with Dynamic Version Fetching */}
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-white/20 bg-black/60 backdrop-blur-md shadow-[0_0_15px_rgba(0,0,0,0.8)]">
-                {isLoadingVersion ? (
-                  <>
-                    <Loader2 className="w-3.5 h-3.5 text-slate-300 animate-spin" />
-                    <span className="text-[10px] sm:text-xs font-mono font-bold uppercase tracking-wider text-slate-200">
-                      Fetching latest version...
-                    </span>
-                  </>
-                ) : (
-                  <>
-                    <span className="relative flex h-2 w-2">
-                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                      <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                    </span>
-                    <span className="text-[10px] sm:text-xs font-mono font-bold uppercase tracking-wider text-white">
-                      ✨ Version {versionInfo.versionName} {versionInfo.versionCode ? `(Build ${versionInfo.versionCode})` : '(Latest Release)'}
-                    </span>
-                  </>
-                )}
-              </div>
-
-              {/* App Logo Frame */}
-              <div className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-black/60 border border-cyan-500/40 backdrop-blur-md flex items-center justify-center shadow-[0_0_30px_rgba(6,182,212,0.35)] overflow-hidden">
-                <img
-                  src="/apk-logo.png"
-                  alt="JARVIS AI Logo"
-                  referrerPolicy="no-referrer"
-                  className="w-full h-full object-contain p-1 drop-shadow-[0_0_15px_rgba(6,182,212,0.6)]"
-                />
-              </div>
-
-              {/* Title & Subtitle */}
-              <div className="space-y-1.5 max-w-md">
-                <h2
-                  id="jarvis-modal-title"
-                  className="text-xl sm:text-2xl font-black uppercase tracking-tight text-white drop-shadow-[0_2px_12px_rgba(0,0,0,0.95)]"
+              {isShowingAdScreen ? (
+                /* Sponsored Ad Interstitial Screen */
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.96 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="w-full flex flex-col items-center space-y-4 py-2"
                 >
-                  JARVIS AI Assistant
-                </h2>
-                <p className="text-xs sm:text-sm text-slate-200 font-medium leading-relaxed drop-shadow-[0_1px_8px_rgba(0,0,0,0.95)]">
-                  Experience instantaneous continuous wake-word voice execution on Android 10.0+ devices.
-                </p>
-              </div>
-
-              {/* Direct Download Option Button */}
-              <div className="w-full space-y-2.5 pt-1">
-                <button
-                  type="button"
-                  id="download-jarvis-app-button"
-                  onClick={handleDownloadClick}
-                  className="w-full py-3.5 px-6 rounded-2xl bg-white hover:bg-slate-100 text-black font-extrabold text-xs sm:text-sm uppercase tracking-widest transition-all duration-300 shadow-[0_0_25px_rgba(255,255,255,0.4)] hover:shadow-[0_0_35px_rgba(255,255,255,0.6)] active:scale-98 cursor-pointer flex items-center justify-center gap-2 group"
-                >
-                  <Download className="w-4 h-4 sm:w-5 sm:h-5 text-black group-hover:translate-y-0.5 transition-transform" />
-                  <span>
-                    {downloadStarted
-                      ? 'Downloading Jarvis AI App...'
-                      : 'Download Jarvis AI App'}
-                  </span>
-                </button>
-
-                {downloadStarted && (
-                  <motion.div
-                    initial={{ opacity: 0, y: -4 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="p-2.5 rounded-xl bg-black/80 border border-emerald-500/40 text-emerald-300 text-xs font-mono flex items-center justify-center gap-1.5 backdrop-blur-md"
-                  >
-                    <Check className="w-4 h-4 text-emerald-400 shrink-0" />
-                    <span>Download started! Check your downloads folder.</span>
-                  </motion.div>
-                )}
-              </div>
-
-              {/* Quick Specs Grid */}
-              <div className="grid grid-cols-3 gap-2 w-full text-left">
-                <div className="p-2.5 rounded-xl bg-black/50 border border-white/15 backdrop-blur-md flex flex-col items-center text-center">
-                  <HardDrive className="w-3.5 h-3.5 text-slate-300 mb-1" />
-                  <span className="text-[9px] font-mono text-slate-400 uppercase">File</span>
-                  <span className="text-xs font-bold text-white truncate max-w-full">
-                    {versionInfo.apkName || 'Jarvis-AI.apk'}
-                  </span>
-                </div>
-                <div className="p-2.5 rounded-xl bg-black/50 border border-white/15 backdrop-blur-md flex flex-col items-center text-center">
-                  <Smartphone className="w-3.5 h-3.5 text-slate-300 mb-1" />
-                  <span className="text-[9px] font-mono text-slate-400 uppercase">Platform</span>
-                  <span className="text-xs font-bold text-slate-200">Android 10+</span>
-                </div>
-                <div className="p-2.5 rounded-xl bg-black/50 border border-white/15 backdrop-blur-md flex flex-col items-center text-center">
-                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-400 mb-1" />
-                  <span className="text-[9px] font-mono text-slate-400 uppercase">Safety</span>
-                  <span className="text-xs font-bold text-emerald-300">Verified</span>
-                </div>
-              </div>
-
-              {/* VIP Waitlist / Early Access Form */}
-              <div className="w-full pt-1 border-t border-white/15">
-                <p className="text-[11px] text-slate-300 mb-2 font-medium">Want cloud sync & early beta updates?</p>
-                {isSubmitted ? (
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    className="p-3 rounded-xl bg-black/80 border border-emerald-500/50 text-emerald-200 flex flex-col items-center space-y-1 shadow-[0_0_20px_rgba(16,185,129,0.2)] backdrop-blur-md"
-                  >
-                    <CheckCircle2 className="w-5 h-5 text-emerald-400" />
-                    <span className="text-xs font-bold uppercase tracking-wider text-emerald-300">
-                      VIP Waitlist Confirmed
+                  <div className="space-y-1.5 max-w-md">
+                    <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-950/80 border border-cyan-400/40 text-[10px] font-mono tracking-widest uppercase text-cyan-300">
+                      <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
+                      Sponsored Partner Display
                     </span>
-                    <p className="text-[11px] text-emerald-300/80">
-                      We will send updates to <span className="underline font-mono text-emerald-200">{email}</span>.
+                    <h2 className="text-lg sm:text-xl font-black uppercase tracking-tight text-white drop-shadow-[0_2px_12px_rgba(0,0,0,0.95)]">
+                      Preparing Your Secure Download
+                    </h2>
+                    <p className="text-xs text-slate-300">
+                      Direct APK download starting automatically in{' '}
+                      <span className="font-mono font-bold text-cyan-300 text-sm">{adCountdown}s</span>
                     </p>
-                  </motion.div>
-                ) : (
-                  <form onSubmit={handleSubmit} className="flex items-center gap-2 w-full">
-                    <input
-                      type="email"
-                      required
-                      placeholder="Enter email for VIP updates..."
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      className="w-full px-3.5 py-2.5 rounded-xl bg-black/60 border border-white/20 focus:border-white text-white placeholder-slate-400 text-xs focus:outline-none focus:ring-1 focus:ring-white/50 backdrop-blur-md transition-all"
+                  </div>
+
+                  {/* Visual Progress Bar */}
+                  <div className="w-full max-w-xs h-1.5 bg-white/15 rounded-full overflow-hidden">
+                    <motion.div
+                      className="h-full bg-gradient-to-r from-cyan-400 to-blue-500"
+                      initial={{ width: '0%' }}
+                      animate={{ width: `${((3 - adCountdown) / 3) * 100}%` }}
+                      transition={{ duration: 0.9, ease: 'linear' }}
                     />
+                  </div>
+
+                  {/* Google AdSense Live Unit */}
+                  <div className="w-full">
+                    <AdSenseBanner label="Sponsored Partner Advertisement" />
+                  </div>
+
+                  {/* Direct Download Now Action Button */}
+                  <div className="w-full max-w-xs pt-1 space-y-2">
                     <button
-                      type="submit"
-                      className="px-4 py-2.5 rounded-xl bg-white/15 hover:bg-white/25 border border-white/25 text-white font-bold text-xs uppercase tracking-wider shrink-0 transition-all duration-200 cursor-pointer flex items-center justify-center gap-1 backdrop-blur-md"
+                      type="button"
+                      onClick={handleImmediateDownload}
+                      className="w-full py-3 px-5 rounded-xl bg-white hover:bg-slate-100 text-black font-extrabold text-xs uppercase tracking-wider transition-all duration-200 shadow-[0_0_20px_rgba(255,255,255,0.4)] active:scale-95 cursor-pointer flex items-center justify-center gap-2"
                     >
-                      <span>SUBSCRIBE</span>
+                      <Download className="w-4 h-4 text-black" />
+                      <span>Start Download Now ({adCountdown}s)</span>
                     </button>
-                  </form>
-                )}
-              </div>
+                    <button
+                      type="button"
+                      onClick={() => setIsShowingAdScreen(false)}
+                      className="text-[11px] text-slate-400 hover:text-white transition-colors cursor-pointer"
+                    >
+                      ← Back to App Details
+                    </button>
+                  </div>
+                </motion.div>
+              ) : (
+                /* Standard Download Modal Body */
+                <>
+                  {/* Top Animated Version Badge with Dynamic Version Fetching */}
+                  <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-white/20 bg-black/60 backdrop-blur-md shadow-[0_0_15px_rgba(0,0,0,0.8)]">
+                    {isLoadingVersion ? (
+                      <>
+                        <Loader2 className="w-3.5 h-3.5 text-slate-300 animate-spin" />
+                        <span className="text-[10px] sm:text-xs font-mono font-bold uppercase tracking-wider text-slate-200">
+                          Fetching latest version...
+                        </span>
+                      </>
+                    ) : (
+                      <>
+                        <span className="relative flex h-2 w-2">
+                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                          <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                        </span>
+                        <span className="text-[10px] sm:text-xs font-mono font-bold uppercase tracking-wider text-white">
+                          ✨ Version {versionInfo.versionName} {versionInfo.versionCode ? `(Build ${versionInfo.versionCode})` : '(Latest Release)'}
+                        </span>
+                      </>
+                    )}
+                  </div>
+
+                  {/* App Logo Frame */}
+                  <div className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-black/60 border border-cyan-500/40 backdrop-blur-md flex items-center justify-center shadow-[0_0_30px_rgba(6,182,212,0.35)] overflow-hidden">
+                    <img
+                      src="/apk-logo.png"
+                      alt="JARVIS AI Logo"
+                      referrerPolicy="no-referrer"
+                      className="w-full h-full object-contain p-1 drop-shadow-[0_0_15px_rgba(6,182,212,0.6)]"
+                    />
+                  </div>
+
+                  {/* Title & Subtitle */}
+                  <div className="space-y-1.5 max-w-md">
+                    <h2
+                      id="jarvis-modal-title"
+                      className="text-xl sm:text-2xl font-black uppercase tracking-tight text-white drop-shadow-[0_2px_12px_rgba(0,0,0,0.95)]"
+                    >
+                      JARVIS AI Assistant
+                    </h2>
+                    <p className="text-xs sm:text-sm text-slate-200 font-medium leading-relaxed drop-shadow-[0_1px_8px_rgba(0,0,0,0.95)]">
+                      Experience instantaneous continuous wake-word voice execution on Android 10.0+ devices.
+                    </p>
+                  </div>
+
+                  {/* Direct Download Option Button */}
+                  <div className="w-full space-y-2 pt-1">
+                    <button
+                      type="button"
+                      id="download-jarvis-app-button"
+                      onClick={handleDownloadClick}
+                      className="w-full py-3.5 px-6 rounded-2xl bg-white hover:bg-slate-100 text-black font-extrabold text-xs sm:text-sm uppercase tracking-widest transition-all duration-300 shadow-[0_0_25px_rgba(255,255,255,0.4)] hover:shadow-[0_0_35px_rgba(255,255,255,0.6)] active:scale-98 cursor-pointer flex items-center justify-center gap-2 group"
+                    >
+                      <Download className="w-4 h-4 sm:w-5 sm:h-5 text-black group-hover:translate-y-0.5 transition-transform" />
+                      <span>
+                        {downloadStarted
+                          ? 'Downloading Jarvis AI App...'
+                          : 'Download Jarvis AI App'}
+                      </span>
+                    </button>
+
+                    {downloadStarted && (
+                      <motion.div
+                        initial={{ opacity: 0, y: -4 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="p-2.5 rounded-xl bg-black/80 border border-emerald-500/40 text-emerald-300 text-xs font-mono flex items-center justify-center gap-1.5 backdrop-blur-md"
+                      >
+                        <Check className="w-4 h-4 text-emerald-400 shrink-0" />
+                        <span>Download started! Check your downloads folder.</span>
+                      </motion.div>
+                    )}
+                  </div>
+
+                  {/* Google AdSense In-Modal Banner */}
+                  <div className="w-full">
+                    <AdSenseBanner label="Sponsored by Partner" />
+                  </div>
+
+                  {/* Quick Specs Grid */}
+                  <div className="grid grid-cols-3 gap-2 w-full text-left">
+                    <div className="p-2.5 rounded-xl bg-black/50 border border-white/15 backdrop-blur-md flex flex-col items-center text-center">
+                      <HardDrive className="w-3.5 h-3.5 text-slate-300 mb-1" />
+                      <span className="text-[9px] font-mono text-slate-400 uppercase">File</span>
+                      <span className="text-xs font-bold text-white truncate max-w-full">
+                        {versionInfo.apkName || 'Jarvis-AI.apk'}
+                      </span>
+                    </div>
+                    <div className="p-2.5 rounded-xl bg-black/50 border border-white/15 backdrop-blur-md flex flex-col items-center text-center">
+                      <Smartphone className="w-3.5 h-3.5 text-slate-300 mb-1" />
+                      <span className="text-[9px] font-mono text-slate-400 uppercase">Platform</span>
+                      <span className="text-xs font-bold text-slate-200">Android 10+</span>
+                    </div>
+                    <div className="p-2.5 rounded-xl bg-black/50 border border-white/15 backdrop-blur-md flex flex-col items-center text-center">
+                      <ShieldCheck className="w-3.5 h-3.5 text-emerald-400 mb-1" />
+                      <span className="text-[9px] font-mono text-slate-400 uppercase">Safety</span>
+                      <span className="text-xs font-bold text-emerald-300">Verified</span>
+                    </div>
+                  </div>
+
+                  {/* VIP Waitlist / Early Access Form */}
+                  <div className="w-full pt-1 border-t border-white/15">
+                    <p className="text-[11px] text-slate-300 mb-2 font-medium">Want cloud sync & early beta updates?</p>
+                    {isSubmitted ? (
+                      <motion.div
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        className="p-3 rounded-xl bg-black/80 border border-emerald-500/50 text-emerald-200 flex flex-col items-center space-y-1 shadow-[0_0_20px_rgba(16,185,129,0.2)] backdrop-blur-md"
+                      >
+                        <CheckCircle2 className="w-5 h-5 text-emerald-400" />
+                        <span className="text-xs font-bold uppercase tracking-wider text-emerald-300">
+                          VIP Waitlist Confirmed
+                        </span>
+                        <p className="text-[11px] text-emerald-300/80">
+                          We will send updates to <span className="underline font-mono text-emerald-200">{email}</span>.
+                        </p>
+                      </motion.div>
+                    ) : (
+                      <form onSubmit={handleSubmit} className="flex items-center gap-2 w-full">
+                        <input
+                          type="email"
+                          required
+                          placeholder="Enter email for VIP updates..."
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                          className="w-full px-3.5 py-2.5 rounded-xl bg-black/60 border border-white/20 focus:border-white text-white placeholder-slate-400 text-xs focus:outline-none focus:ring-1 focus:ring-white/50 backdrop-blur-md transition-all"
+                        />
+                        <button
+                          type="submit"
+                          className="px-4 py-2.5 rounded-xl bg-white/15 hover:bg-white/25 border border-white/25 text-white font-bold text-xs uppercase tracking-wider shrink-0 transition-all duration-200 cursor-pointer flex items-center justify-center gap-1 backdrop-blur-md"
+                        >
+                          <span>SUBSCRIBE</span>
+                        </button>
+                      </form>
+                    )}
+                  </div>
+                </>
+              )}
 
             </div>
           </motion.div>

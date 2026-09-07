@@ -16,6 +16,14 @@ export default function App() {
   const navItems = ['Home', 'Features', 'Vision', 'Control', 'How It Works'];
 
   const handleDownloadJarvis = () => {
+    try {
+      if (typeof window !== 'undefined') {
+        window.adsbygoogle = window.adsbygoogle || [];
+        window.adsbygoogle.push({});
+      }
+    } catch {
+      // Ignored if adblock or pending
+    }
     setIsModalOpen(true);
   };
 

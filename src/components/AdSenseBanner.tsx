@@ -17,7 +17,7 @@ interface AdSenseBannerProps {
 
 export const AdSenseBanner: React.FC<AdSenseBannerProps> = ({
   client = 'ca-pub-9517350900599370',
-  slot,
+  slot = '9299521465',
   format = 'auto',
   responsive = true,
   className = '',
